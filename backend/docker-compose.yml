@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: cryptostream-db
+    ports:
+      # CHANGED: We are now mapping external port 5433 to internal 5432
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: cryptostream
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+    volumes:
+      - postgres_data_v2:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - crypto-net
+
+  redis:
+    image: redis:alpine
+    container_name: cryptostream-cache
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - crypto-net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: cryptostream-db-gui
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@cryptostream.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - crypto-net
+
+volumes:
+  postgres_data_v2:
+
+networks:
+  crypto-net:
+    driver: bridge
+
+    
