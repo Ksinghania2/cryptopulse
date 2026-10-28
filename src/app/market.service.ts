@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, timer, forkJoin } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 export interface CryptoNews {
   title: string;
@@ -15,8 +16,8 @@ export interface CryptoNews {
 })
 export class MarketService {
   
-  private binanceUrl = 'https://api.binance.com/api/v3/ticker/24hr';
-  private javaUrl = 'http://localhost:8080/api'; // Base Java API URL
+  private binanceUrl = environment.binanceUrl;
+  private javaUrl = environment.javaUrl; // Base Java API URL
 
   constructor(private http: HttpClient) {}
 

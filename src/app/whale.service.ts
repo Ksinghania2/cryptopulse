@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 export interface WhaleTransaction {
   coinSymbol: string;
@@ -16,7 +17,7 @@ export interface WhaleTransaction {
 })
 export class WhaleService {
 
-  private apiUrl = 'http://localhost:8080/api/whales';
+  private apiUrl = environment.javaUrl + '/whales';
 
   constructor(private http: HttpClient) { }
 

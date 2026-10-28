@@ -52,12 +52,12 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.marketService.getLivePrices().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(data => this.cryptoMarket = data);
     
-    this.marketService.getMacroStocks().subscribe({
+    this.marketService.getMacroStocks().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => this.stockMarket = data,
       error: (err) => console.error('Stock Error:', err)
     });
 
-    this.marketService.getSentiment().subscribe({
+    this.marketService.getSentiment().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data: any) => {
         this.sentiment = { score: data.score, label: data.label, trend: 'down' };
         this.isLoadingSentiment = false;
@@ -65,7 +65,7 @@ export class AppComponent implements OnInit {
       error: () => this.isLoadingSentiment = false
     });
 
-    this.marketService.getNews().subscribe({
+    this.marketService.getNews().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         this.newsArticles = data;
         this.isLoadingNews = false;
@@ -81,11 +81,11 @@ export class AppComponent implements OnInit {
       this.isLoadingWhales = false;
     });
 
-    this.web3Service.user$.subscribe(userData => { if (userData) this.user = userData; });
+    this.web3Service.user$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(userData => { if (userData) this.user = userData; });
   }
 
   loadPredictions() {
-    this.marketService.getPredictions().subscribe(data => {
+    this.marketService.getPredictions().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(data => {
       // Calculate percentages for the UI
       this.predictionMarkets = data.map(market => this.formatMarket(market));
       this.isLoadingPredict = false;
@@ -94,7 +94,7 @@ export class AppComponent implements OnInit {
 
   submitVote(marketId: string, isYes: boolean) {
     const voteType = isYes ? 'YES' : 'NO';
-    this.marketService.vote(marketId, voteType).subscribe(updatedMarket => {
+    this.marketService.vote(marketId, voteType).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(updatedMarket => {
       const index = this.predictionMarkets.findIndex(m => m.id === updatedMarket.id);
       if (index !== -1) {
         // Recalculate percentages instantly when the database updates

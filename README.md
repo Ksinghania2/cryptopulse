@@ -1,27 +1,56 @@
 # CryptoPulse
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Full-stack crypto dashboard: Angular 17 frontend + Spring Boot 3.4 backend, backed by PostgreSQL and Redis.
 
-## Development server
+## Architecture
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- `src/` — Angular 17 standalone app (TypeScript, SCSS, Tailwind).
+- `backend/` — Spring Boot 3.4 (Java 17) REST API.
+- `backend/docker-compose.yml` — PostgreSQL (pgvector), Redis, pgAdmin.
 
-## Code scaffolding
+## Prerequisites
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Node.js 18 or 20 LTS (Angular 17 does not support Node 24).
+- Java 17+ (tested with 25).
+- Maven 3.9+ (or use `backend/mvnw`).
+- Docker (for Postgres/Redis).
+
+## Run the backend
+
+```bash
+cd backend
+docker compose up -d          # starts Postgres (5433), Redis (6379), pgAdmin (5050)
+mvn spring-boot:run           # API on http://localhost:8080
+```
+
+## Run the frontend
+
+```bash
+npm install
+npm start                     # dev server on http://localhost:4200
+```
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+npm run build                 # Angular production build -> dist/crypto-pulse
+cd backend && mvn package     # Spring Boot jar
+```
 
-## Running unit tests
+## Tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+npm test                      # Karma/Jasmine (frontend)
+cd backend && mvn test        # JUnit (backend)
+```
 
-## Running end-to-end tests
+## Configuration
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- Frontend API base URL: `src/environments/environment.ts` (`javaUrl`).
+- Backend DB/Redis/CORS: `backend/src/main/resources/application.properties`
+  (`app.cors.allowed-origin`, `spring.datasource.*`).
 
-## Further help
+## Notes
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Whale transactions are synthetically generated for demo purposes.
+- MetaMask is required for wallet features.

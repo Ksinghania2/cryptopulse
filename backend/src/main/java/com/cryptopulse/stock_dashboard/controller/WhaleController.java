@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/whales")
-@CrossOrigin(origins = "http://localhost:4200") // Allow Angular to access this
 public class WhaleController {
 
     // 1. SECURITY: Define the SLF4J Logger

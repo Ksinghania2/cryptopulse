@@ -13,7 +13,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/stocks")
-@CrossOrigin(origins = "http://localhost:4200") // Allow Angular to talk to us
 public class StockController {
 
     private static final Logger logger = LoggerFactory.getLogger(StockController.class);
