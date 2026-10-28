@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
+import { timer } from 'rxjs';
 import { WhaleService, WhaleTransaction } from '../whale.service';
 import { MarketService, CryptoNews } from '../market.service';
 import { Web3Service } from '../web3.service';
@@ -62,10 +63,8 @@ export class HomeComponent implements OnInit {
       error: () => this.isLoadingSentiment = false
     });
 
-    this.marketService.getNews().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (data) => { this.newsArticles = data; this.isLoadingNews = false; },
-      error: () => this.isLoadingNews = false
-    });
+    this.loadNews();
+    timer(60000, 60000).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.loadNews());
 
     this.loadPredictions();
 
@@ -88,6 +87,13 @@ export class HomeComponent implements OnInit {
     this.marketService.vote(marketId, voteType).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((updatedMarket: any) => {
       const index = this.predictionMarkets.findIndex((m: any) => m.id === updatedMarket.id);
       if (index !== -1) this.predictionMarkets[index] = this.formatMarket(updatedMarket);
+    });
+  }
+
+  loadNews() {
+    this.marketService.getNews().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (data) => { this.newsArticles = data; this.isLoadingNews = false; },
+      error: () => this.isLoadingNews = false
     });
   }
 
