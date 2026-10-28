@@ -1,0 +1,22 @@
+<header class="top-nav">
+  <div class="brand">
+    <div class="logo-icon">CS</div>
+    <span class="brand-name">CryptoStream <span class="pro-badge">PRO</span></span>
+  </div>
+  <nav class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+    <a routerLink="/videos" routerLinkActive="active">Videos</a>
+    <a routerLink="/charts" routerLinkActive="active">Charts</a>
+    <a routerLink="/news" routerLinkActive="active">News</a>
+    <a routerLink="/regulations" routerLinkActive="active">Regulations</a>
+    <a routerLink="/movements" routerLinkActive="active">Movements</a>
+    <a routerLink="/markets" routerLinkActive="active">Markets</a>
+  </nav>
+  <button class="wallet-btn" (click)="connectWallet()">
+    <span class="status-dot" [class.connected]="user.isConnected"></span>
+    {{ user.isConnected ? (user.address | slice:0:6) + '...' : 'Connect Wallet' }}
+  </button>
+</header>
+<main class="router-outlet-wrap">
+  <router-outlet></router-outlet>
+</main>

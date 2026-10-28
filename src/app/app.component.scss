@@ -1,3 +1,28 @@
+/* --- TOP NAV (shell) --- */
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: #151a21;
+  border-bottom: 1px solid #2b3139;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.top-nav .brand { display: flex; align-items: center; gap: 10px; }
+.top-nav .logo-icon { width: 32px; height: 32px; background: #3772ff; color: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+.top-nav .brand-name { font-size: 1.2rem; font-weight: 700; color: #eaecef; }
+.top-nav .pro-badge { font-size: 0.6rem; background: #1e2329; color: #848e9c; padding: 2px 4px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
+.top-nav .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.top-nav .nav-links a { color: #848e9c; text-decoration: none; padding: 6px 12px; border-radius: 8px; font-size: 0.9rem; transition: all .2s; }
+.top-nav .nav-links a:hover, .top-nav .nav-links a.active { background: #1e2329; color: #eaecef; }
+.top-nav .wallet-btn { background: #eaecef; color: #0b0e11; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.top-nav .status-dot { width: 8px; height: 8px; background: #f6465d; border-radius: 50%; }
+.top-nav .status-dot.connected { background: #0ecb81; }
+.router-outlet-wrap { min-height: calc(100vh - 60px); }
+
+
 /* --- GLOBAL VARIABLES --- */
 $bg-dark: #0b0e11;
 $bg-panel: #151a21;

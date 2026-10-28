@@ -1,0 +1,181 @@
+<div class="dashboard-grid">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo-icon">CS</div>
+      <span class="brand-name">CryptoStream <span class="pro-badge">PRO</span></span>
+    </div>
+
+    <div class="menu-label">DISCOVERY</div>
+    <nav class="menu">
+      <div
+        *ngFor="let cat of categories"
+        class="menu-item"
+        [class.active]="selectedCategory === cat.name"
+        (click)="selectCategory(cat.name)">
+        <span class="icon">{{ cat.icon }}</span>
+        <span class="name">{{ cat.name }}</span>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+
+    <header class="top-bar">
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search tokens, news, or alpha..." class="search-input">
+      </div>
+      <button class="wallet-btn" (click)="connectWallet()">
+        <span class="status-dot" [class.connected]="user.isConnected"></span>
+        {{ user.isConnected ? (user.address | slice:0:6) + '...' : 'Connect Wallet' }}
+      </button>
+    </header>
+
+    <div class="ticker-bar">
+      <div class="ticker-label">MACRO:</div>
+      <div class="ticker-items">
+        <span *ngFor="let stock of stockMarket" class="ticker-item">
+          {{ stock.symbol }}
+          <span [class.green]="stock.up" [class.red]="!stock.up">
+            {{ stock.price }} ({{ stock.change }})
+          </span>
+        </span>
+      </div>
+      <div class="ticker-label live">LIVE CRYPTO:</div>
+      <div class="ticker-items">
+        <span *ngFor="let crypto of cryptoMarket" class="ticker-item">
+          {{ crypto.symbol }}
+          <span [class.green]="crypto.up" [class.red]="!crypto.up">
+            ${{ crypto.price }} ({{ crypto.change }}%)
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <div class="news-feed-container">
+        <div class="feed-header">
+          <h2>🔥 Breaking Intelligence</h2>
+          <span class="live-indicator">LIVE FEED</span>
+        </div>
+
+        <div class="articles-list">
+
+          <ng-container *ngIf="isLoadingNews">
+             <div class="news-card" *ngFor="let i of [1,2,3,4]">
+               <div class="news-meta skeleton text" style="width: 30%"></div>
+               <div class="news-title skeleton title"></div>
+               <div class="news-title skeleton title" style="width: 60%"></div>
+               <div class="news-actions" style="margin-top: 15px;">
+                 <div class="action-btn skeleton btn"></div>
+                 <div class="action-btn skeleton btn"></div>
+               </div>
+             </div>
+          </ng-container>
+
+          <ng-container *ngIf="!isLoadingNews">
+            <div *ngFor="let article of newsArticles" class="news-card">
+              <div class="news-meta">
+                <span class="source">{{ article.source }}</span>
+                <span class="dot">•</span>
+                <span class="date">{{ article.date }}</span>
+              </div>
+              <a [href]="article.link" target="_blank" class="news-title">
+                {{ article.title }}
+              </a>
+              <div class="news-actions">
+                <button class="action-btn">Analyze Sentiment</button>
+                <button class="action-btn">Share Alpha</button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="right-sidebar">
+
+    <div class="tabs">
+      <div class="tab" [class.active]="activeRightTab === 'whales'" (click)="activeRightTab = 'whales'">WHALES</div>
+      <div class="tab" [class.active]="activeRightTab === 'sentiment'" (click)="activeRightTab = 'sentiment'">SENTIMENT</div>
+      <div class="tab" [class.active]="activeRightTab === 'predict'" (click)="activeRightTab = 'predict'">PREDICT</div>
+    </div>
+    <div class="tab-content" *ngIf="activeRightTab === 'whales'">
+      <div *ngIf="isLoadingWhales">
+        <div class="whale-card" *ngFor="let i of [1,2,3,4,5]">
+           <div class="whale-header skeleton text" style="margin-bottom: 5px;"></div>
+           <div class="whale-body skeleton text" style="height: 1.5em;"></div>
+        </div>
+      </div>
+      <div class="whale-list" *ngIf="!isLoadingWhales">
+        <div *ngFor="let whale of whales" class="whale-card">
+          <div class="whale-header">
+            <span class="coin">{{ whale.coinSymbol }} Move</span>
+            <span class="wallet">{{ whale.walletAddress | slice:0:6 }}...</span>
+          </div>
+          <div class="whale-body">
+            <span class="type" [class.buy]="whale.type === 'Accumulated' || whale.type === 'Minted'"
+                              [class.sell]="whale.type === 'Dumped' || whale.type === 'Burned'">
+              {{ whale.type }}
+            </span>
+            <span class="amount">{{ whale.amount }}</span>
+          </div>
+          <div class="whale-value">{{ whale.usdValue }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" *ngIf="activeRightTab === 'sentiment'">
+      <div class="sentiment-card">
+        <div *ngIf="isLoadingSentiment">
+           <div class="score-circle skeleton circle" style="margin: 0 auto 20px;"></div>
+           <div class="skeleton text" style="width: 50%; margin: 0 auto 10px;"></div>
+           <div class="skeleton text" style="width: 90%; margin: 10px auto;"></div>
+        </div>
+        <div *ngIf="!isLoadingSentiment">
+          <div class="score-circle"
+               [class.extreme-fear]="sentiment.score < 25"
+               [class.fear]="sentiment.score >= 25 && sentiment.score < 45"
+               [class.neutral]="sentiment.score >= 45 && sentiment.score < 55"
+               [class.greed]="sentiment.score >= 55 && sentiment.score < 75"
+               [class.extreme-greed]="sentiment.score >= 75">
+            <span class="score-number">{{ sentiment.score }}</span>
+            <span class="score-label">{{ sentiment.label }}</span>
+          </div>
+          <div class="trend-indicator">
+            Trend: <span class="trend-arrow">{{ sentiment.trend === 'up' ? '📈 Rising' : '📉 Falling' }}</span>
+          </div>
+          <p class="sentiment-desc">
+            Market sentiment is currently driven by <strong>{{ sentiment.label }}</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" *ngIf="activeRightTab === 'predict'">
+      <div *ngIf="isLoadingPredict">
+        <div class="predict-card" *ngFor="let i of [1,2,3]">
+           <div class="skeleton text" style="width: 70%; margin-bottom: 10px;"></div>
+           <div class="skeleton text" style="height: 32px; border-radius: 6px;"></div>
+        </div>
+      </div>
+      <div *ngIf="!isLoadingPredict">
+        <div *ngFor="let market of predictionMarkets" class="predict-card">
+          <div class="market-question">{{ market.event }}</div>
+          <div class="bars">
+            <div class="bar yes" [style.width.%]="market.yesPercent" (click)="submitVote(market.id, true)">
+               YES {{ market.yesPercent }}%
+            </div>
+            <div class="bar no" [style.width.%]="market.noPercent" (click)="submitVote(market.id, false)">
+               NO {{ market.noPercent }}%
+            </div>
+          </div>
+          <div class="volume">Vol: {{ market.volume }}</div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+</div>
