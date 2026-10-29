@@ -7,6 +7,7 @@ import { RegulationsComponent } from './regulations/regulations.component';
 import { MovementsComponent } from './movements/movements.component';
 import { MarketsComponent } from './markets/markets.component';
 import { AiInsightsComponent } from './ai-insights/ai-insights.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path: 'movements', component: MovementsComponent },
   { path: 'markets', component: MarketsComponent },
   { path: 'ai', component: AiInsightsComponent },
+  { path: 'analytics', component: AnalyticsComponent },
   { path: '**', redirectTo: '' }
 ];
