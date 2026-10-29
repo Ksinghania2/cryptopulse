@@ -20,7 +20,7 @@
 .top-nav .wallet-btn { background: #eaecef; color: #0b0e11; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 .top-nav .status-dot { width: 8px; height: 8px; background: #f6465d; border-radius: 50%; }
 .top-nav .status-dot.connected { background: #0ecb81; }
-.router-outlet-wrap { min-height: calc(100vh - 60px); }
+.router-outlet-wrap { min-height: calc(100vh - 60px); overflow-y: auto; }
 
 
 /* --- GLOBAL VARIABLES --- */

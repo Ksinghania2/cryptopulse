@@ -47,6 +47,26 @@ export class HomeComponent implements OnInit {
   selectedCategory = 'Market Analysis';
   activeRightTab = 'whales';
 
+  private categoryKeywords: Record<string, string[]> = {
+    'Market Analysis': [],
+    'Regulatory Updates': ['regulation', 'sec', 'etf', 'law', 'policy', 'court', 'ban'],
+    'Blockchain Dev': ['blockchain', 'developer', 'protocol', 'upgrade', 'fork'],
+    'Token News': ['token', 'coin', 'airdrop'],
+    'Institutional': ['institutional', 'etf', 'fund', 'bank'],
+    'Security & Fraud': ['hack', 'scam', 'fraud', 'security', 'exploit'],
+    'DeFi & Web3': ['defi', 'web3', 'nft', 'dao'],
+    'Mining': ['mining', 'miner', 'hashrate']
+  };
+
+  get filteredNews(): CryptoNews[] {
+    const kw = this.categoryKeywords[this.selectedCategory] || [];
+    if (!kw.length) return this.newsArticles;
+    return this.newsArticles.filter(a => {
+      const t = (a.title + ' ' + a.source).toLowerCase();
+      return kw.some(k => t.includes(k));
+    });
+  }
+
   ngOnInit() {
     this.marketService.getLivePrices().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(data => this.cryptoMarket = data);
 

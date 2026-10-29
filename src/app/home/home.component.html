@@ -75,7 +75,7 @@
           </ng-container>
 
           <ng-container *ngIf="!isLoadingNews">
-            <div *ngFor="let article of newsArticles" class="news-card">
+            <div *ngFor="let article of filteredNews" class="news-card">
               <div class="news-meta">
                 <span class="source">{{ article.source }}</span>
                 <span class="dot">•</span>
