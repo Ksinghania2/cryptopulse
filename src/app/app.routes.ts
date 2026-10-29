@@ -6,6 +6,7 @@ import { NewsComponent } from './news/news.component';
 import { RegulationsComponent } from './regulations/regulations.component';
 import { MovementsComponent } from './movements/movements.component';
 import { MarketsComponent } from './markets/markets.component';
+import { AiInsightsComponent } from './ai-insights/ai-insights.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,5 +16,6 @@ export const routes: Routes = [
   { path: 'regulations', component: RegulationsComponent },
   { path: 'movements', component: MovementsComponent },
   { path: 'markets', component: MarketsComponent },
+  { path: 'ai', component: AiInsightsComponent },
   { path: '**', redirectTo: '' }
 ];

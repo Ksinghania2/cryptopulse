@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, timer, forkJoin } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 
@@ -21,23 +21,11 @@ export class MarketService {
 
   constructor(private http: HttpClient) {}
 
-  // --- FEATURE A: LIVE CRYPTO (Binance) ---
+  // --- FEATURE A: LIVE CRYPTO (proxied via backend to avoid CORS) ---
   getLivePrices(): Observable<any> {
     return timer(0, 3000).pipe(
-      switchMap(() => {
-        return forkJoin([
-          this.http.get(`${this.binanceUrl}?symbol=BTCUSDT`),
-          this.http.get(`${this.binanceUrl}?symbol=ETHUSDT`),
-          this.http.get(`${this.binanceUrl}?symbol=SOLUSDT`)
-        ]);
-      }),
-      map((responses: any[]) => {
-        return [
-          { symbol: 'BTC', price: parseFloat(responses[0].lastPrice).toFixed(2), change: parseFloat(responses[0].priceChangePercent).toFixed(2), up: parseFloat(responses[0].priceChangePercent) > 0 },
-          { symbol: 'ETH', price: parseFloat(responses[1].lastPrice).toFixed(2), change: parseFloat(responses[1].priceChangePercent).toFixed(2), up: parseFloat(responses[1].priceChangePercent) > 0 },
-          { symbol: 'SOL', price: parseFloat(responses[2].lastPrice).toFixed(2), change: parseFloat(responses[2].priceChangePercent).toFixed(2), up: parseFloat(responses[2].priceChangePercent) > 0 }
-        ];
-      })
+      switchMap(() => this.http.get(`${this.javaUrl}/prices`)),
+      map((responses: any) => responses)
     );
   }
 
